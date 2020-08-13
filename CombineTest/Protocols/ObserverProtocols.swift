@@ -18,14 +18,14 @@ protocol Observer: class {
     func update(forResult result: Result<CountModel, Error>)
 }
 
-protocol Observant: class {
+protocol ObservableSubjectManager: class {
     var subject: PassthroughSubject<CountModel, Error> { get }
     var publisher: AnyPublisher<CountModel, Error> { get }
     
     func setupObserver(_ observer: Observer)
 }
 
-extension Observant {
+extension ObservableSubjectManager {
     func setupObserver(_ observer: Observer) {
         observer.cancellable = self.publisher.sink(receiveCompletion: { (subscriberCompletion) in
             switch subscriberCompletion {
