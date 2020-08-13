@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class Coordinator: Observant {
+class Coordinator: ObservableSubjectManager {
     var editTabNavigationController: UINavigationController = UINavigationController()
     var viewTabNavigationController: UINavigationController = UINavigationController()
     var tabBar: UITabBarController = UITabBarController()
