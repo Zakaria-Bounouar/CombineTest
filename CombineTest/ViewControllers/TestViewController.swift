@@ -106,13 +106,12 @@ class TestViewController: UIViewController, Observer {
     
     // MARK: - Observer method
     
-    func update(forResult result: Result<CountModel, Error>) {
-        switch result {
-        case .success(let newCountModel):
-            self.countModel = newCountModel
-        case .failure(let error):
-            debugPrint(error)
-            // Could show an error message or something here.
+    func update(forStatus status: ObservableCountStatus) {
+        switch status {
+        case .didLoad(let countModel):
+            self.countModel = countModel
+        default:
+            break
         }
     }
     
