@@ -14,8 +14,8 @@ class Coordinator: ObservableSubjectManager {
     var viewTabNavigationController: UINavigationController = UINavigationController()
     var tabBar: UITabBarController = UITabBarController()
     
-    var subject: PassthroughSubject<CountModel, Error> = PassthroughSubject<CountModel, Error>()
-    var publisher: AnyPublisher<CountModel, Error> {
+    var subject: PassthroughSubject<ObservableCountStatus, Never> = PassthroughSubject<ObservableCountStatus, Never>()
+    var publisher: AnyPublisher<ObservableCountStatus, Never> {
         // Here we're "erasing" the information of which type
         // that our subject actually is, only letting our outside
         // code know that it's a read-only publisher:
@@ -24,7 +24,7 @@ class Coordinator: ObservableSubjectManager {
     
     var countModel: CountModel {
         didSet {
-            subject.send(countModel)
+            subject.send(.didLoad(countModel))
         }
     }
     

@@ -15,28 +15,20 @@ import Combine
 protocol Observer: class {
     var cancellable: AnyCancellable? { get set }
     
-    func update(forResult result: Result<CountModel, Error>)
+    func update(forStatus status: ObservableCountStatus)
 }
 
 protocol ObservableSubjectManager: class {
-    var subject: PassthroughSubject<CountModel, Error> { get }
-    var publisher: AnyPublisher<CountModel, Error> { get }
+    var subject: PassthroughSubject<ObservableCountStatus, Never> { get }
+    var publisher: AnyPublisher<ObservableCountStatus, Never> { get }
     
     func setupObserver(_ observer: Observer)
 }
 
 extension ObservableSubjectManager {
     func setupObserver(_ observer: Observer) {
-        observer.cancellable = self.publisher.sink(receiveCompletion: { (subscriberCompletion) in
-            switch subscriberCompletion {
-            case .failure(let error):
-                observer.update(forResult: .failure(error))
-            case .finished:
-                // Not sure what to do here
-                break
-            }
-        }, receiveValue: { countModel in
-            observer.update(forResult: .success(countModel))
+        observer.cancellable = self.publisher.sink(receiveValue: { subjectStatus in
+            observer.update(forStatus: subjectStatus)
         })
     }
 }
